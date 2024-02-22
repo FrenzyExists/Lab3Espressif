@@ -25,7 +25,6 @@
 #define S7_2 GPIO_NUM_4
 
 
-
 volatile bool blinkEnabled = true;
 bool blinky = true;
 const int increment = 1; // delta count
@@ -97,7 +96,7 @@ void countTask(void *pvParameters) {
     for(;;) {
         printf("Count: %d\n", myCount);
         if(xQueueReceive(xQueue, &pinNumber, portMAX_DELAY)) {
-            myCount += 1;
+            myCount = (myCount + 1) % 100;
             printf("My Count Count: %d\n", myCount);
         }
         vTaskDelay(15.51);
@@ -139,7 +138,6 @@ void sevenSegmentTask(void *pvParameters) {
         gpio_set_level(S7_1, 1);
         gpio_set_level(S7_2, 0);
 
-
         gpio_set_level(A, (digitalBinary[myCount % 10] >> 6) & 1);
         gpio_set_level(B, (digitalBinary[myCount % 10] >> 5) & 1);
         gpio_set_level(C, (digitalBinary[myCount % 10] >> 4) & 1);
@@ -177,8 +175,8 @@ void app_main() {
     // seven-segment
     initSevenSegment();
 
-
     xQueue =  xQueueCreate(10, sizeof(int));
+
     // Create button semaphore
     buttonSemaphore = xSemaphoreCreateBinary();
 

@@ -40,9 +40,11 @@ Continuing with the use of buttons and switches, these devices suffer from a phe
 
 ## Hardware Implementation
 
+![](./assets/Hardware-Implementation.png)
+
 For the hardware implementation we went over the use of a *Schmitt Trigger.*  A Schmitt Trigger Circuit Diagram is a fast-operating voltage level detector. When the input voltage arrives at a level determined by the circuit components, the output voltage switches rapidly between its maximum positive level and its maximum negative level. 
 
-![](./assets/Hardware-Implementation.png)
+![](./assets/Hardware-Implementation-Board.jpg)
 
 There are different ways to make a *Schmitt Trigger*, for example using an *Resistor-Capacitor* circuit, or RC circuit. The idea of an RC circuit is that the reactance of a capacitor varies inversely with frequency, while keeping the resistor constant as frequency changes. Usually RC circuits are used as low-frequency filters.
 
@@ -54,6 +56,10 @@ This implementation is more economically costly since it requires more hardware.
 
 Here the debouncing is done by the software. There are a few ways to achieve debouncing with software. One way is to perform polling, which is when the CPU constantly checks when said I/O needs CPU processing. Not to confuse with interrupt, which instead of constantly checking it if the I/O needs CPU processing it simply "notices" it; its not a protocol like polling but a hardware mechanism.
 
+![](./assets/Software-Implementation-Board.jpg)
+
+This here would be the software button. I used interrupts and the API by using the vTask. I'll explain it better later. It's 3am rn.
+
 # Display
 
 ![](./assets/seven-segment-display.jpg)
@@ -62,7 +68,7 @@ Here the debouncing is done by the software. There are a few ways to achieve deb
 
 This lab was really interesting. I learned and re-learned a lot of things from other courses. For example, I had to re-learn how RC circuits work, what is noise, noise margins, and other things. I also went to finally put into practice the things I learned from my electronics and logic circuits class.
 
-While the learning experience was great I encountered lots... LOTS of issues. For starters, I couldn't get the Hx711 display working no matter what I tried in the code. The display uses 5V of power and connecting it to the same ground as the rest of the circuit -which uses 3.3V, caused issues in the logic of the microprocessor. Then when I use the LTD-6710P seven-segment display I realized that some pins in the version of the ESP32 I used are pulldown pins by default while others are pullup. And although the espressif as certain methods such as `gpio_pullup_dis`, `gpio_pullup_en`, `gpio_pulldown_dis` and `gpio_pulldown_dis`, in the ESP32-WROVER's pins showed no effect when testing. 
+While the learning experience was great I encountered lots... LOTS of issues. For starters, I couldn't get the Hx711 display working no matter what I tried in the code. The display uses 5V of power and connecting it to the same ground as the rest of the circuit -which uses 3.3V, caused issues in the logic of the microprocessor. Then when I use the LTD-6710P seven-segment display I realized that some pins in the version of the ESP32 I used are pulldown pins by default while others are pullup. And although the espressif as certain methods such as `gpio_pullup_dis`, `gpio_pullup_en`, `gpio_pulldown_dis` and `gpio_pulldown_dis`, in the ESP32-WROVER's pins showed no effect when testing.
 
 ## References
 
@@ -74,4 +80,4 @@ While the learning experience was great I encountered lots... LOTS of issues. Fo
 
 ## Datasheets
 
-![LTD-6710P Lite-On | Mouser](./datasheets/lite-on_lites09086-1-17372401.pdf)
+[LTD-6710P Lite-On | Mouser](./datasheets/lite-on_lites09086-1-17372401.pdf)

@@ -1,6 +1,6 @@
 # Report Number 3 | Interrupts, Debouncing and the Keypad
 
-Some lab from microprocessors I did on the esp32. Bellow is a sort of more in-depth version of the lab me and another lad, Victor did. This version is from my own perspective. 
+Some lab from microprocessors I did on the esp32. Bellow is a sort of more in-depth version of the lab me and another lad, Victor did. This version is from my own perspective.
 
 **PS: Hey Vic, if you see this, remind me to finish RE on VR throught the entire class so I don't procrastinate again**
 
@@ -42,11 +42,11 @@ Continuing with the use of buttons and switches, these devices suffer from a phe
 
 ![](./assets/Hardware-Implementation.png)
 
-For the hardware implementation we went over the use of a *Schmitt Trigger.*  A Schmitt Trigger Circuit Diagram is a fast-operating voltage level detector. When the input voltage arrives at a level determined by the circuit components, the output voltage switches rapidly between its maximum positive level and its maximum negative level. 
+For the hardware implementation we went over the use of a _Schmitt Trigger._  A Schmitt Trigger Circuit Diagram is a fast-operating voltage level detector. When the input voltage arrives at a level determined by the circuit components, the output voltage switches rapidly between its maximum positive level and its maximum negative level.
 
 ![](./assets/Hardware-Implementation-Board.jpg)
 
-There are different ways to make a *Schmitt Trigger*, for example using an *Resistor-Capacitor* circuit, or RC circuit. The idea of an RC circuit is that the reactance of a capacitor varies inversely with frequency, while keeping the resistor constant as frequency changes. Usually RC circuits are used as low-frequency filters.
+There are different ways to make a _Schmitt Trigger_, for example using an _Resistor-Capacitor_ circuit, or RC circuit. The idea of an RC circuit is that the reactance of a capacitor varies inversely with frequency, while keeping the resistor constant as frequency changes. Usually RC circuits are used as low-frequency filters.
 
 This implementation is more economically costly since it requires more hardware. Which is the reason many opt for the software implementation. The idea is that the reactance of a capacitor varies inversely with frequency, while the value of the resistor remains constant as the frequency changes.
 
@@ -58,11 +58,29 @@ Here the debouncing is done by the software. There are a few ways to achieve deb
 
 ![](./assets/Software-Implementation-Board.jpg)
 
-This here would be the software button. I used interrupts and the API by using the vTask. I'll explain it better later. It's 3am rn.
+This here would be the software button. I used interrupts and the API by using the vTask. A vTask is a task that represents a separate execution context with its own stack, priority, and execution flow, like a thread. These vTasks are managed by FreeRTOS, an open-source operating system that is integrated in the ESP-IDF framework. It provides the ability to run different functions concurrently, similar to `pthreads`. The espressif version of FreeRTOS allows the ability to take advantage of both cores of the ESP32, meaning we can also run tasks in parallel.
 
-# Display
+You can create a task with `xTaskCreate`; specify the function you want to run concurrently by specifying a pointer, the stack size of the task, its priority and a reference to a `Handle`. If you wanted to manage a particular task you could use its task name as a pointer. The task size represented as a stack is a stack size in words, and its used to store the stack state and the local variables of the task. The priority of the task refers on how much CPU time will said task have compared to other tasks that are running. And the `handle` refers to a pointer that allows you to manipulate said task.
+
+The pins in the ESP32 are all GPIO pins, that is, pins that can be both for input of data or output of data, as well as power.
+
+## Display
 
 ![](./assets/seven-segment-display.jpg)
+
+There are two quotes I'm taking to heart while taking this course and later in my career:
+
+> "Demo or Die " Prof. Manuel Rodriguez
+
+> "Find solutions, its best to return something than nothing... at all costs" Lab instructor
+
+I had to use this seven-segment display instead of the 16x2 LCD display since I couldn't get the LCD working on the ESP32. After a day or two of debugging I found that my issue was the fact that the display required 5V and the ESP32 uses 3.7V. Now I could just use a 5V external source, and I did in fact! However for some reason it completely messed the logic for the microcontroller. To speed up I used the module that will be used in lab 4 and I believe that in lab 5 as well.
+
+If you're someone taking this course, chances are you're here this in hopes to copy-paste. Unless you somehow have a fully-working ESP-32 Wrover... that won't work bud. This isn't your average course. You'll be forced to figure out things, the easy way... or the hard way. I also found repos of previous students. I won't say where they are, for obvious reasons. Use them as reference on where to go or a general path to take. I learned this the hard way, so heed my words lad. Its **Demo, or Die**.
+
+## Complementary Task
+
+I'll add more details of this on the next commit, not sure if I will provide the code on that commit that one or the one next to that. TL;DR use a hard drive to simulate the functionality of a rotary encoder using an opto-switch to detect the segments in the hard drive.
 
 ## Conclusion
 
